@@ -1,6 +1,246 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>wsy2126 的博客</title>
+  <style>
+    :root{
+      --bg:#0e0e10;
+      --bg2:#16161a;
+      --card:#1c1c22;
+      --line:#2a2a32;
+      --text:#ececef;
+      --muted:#9a9aa6;
+      --accent:#e8602a;      /* 暖橙，主色 */
+      --accent2:#f0a04b;     /* 暖黄橙，辅色 */
+      --radius:16px;
+      --maxw:960px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      background:var(--bg);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+      line-height:1.75;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+
+    /* ---------- Header ---------- */
+    header{
+      position:sticky;top:0;z-index:20;
+      background:rgba(14,14,16,.82);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+    .logo{font-weight:800;font-size:1.15rem;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    .nav-links{display:flex;gap:26px;font-size:.92rem;color:var(--muted)}
+    .nav-links a{transition:color .2s}
+    .nav-links a:hover{color:var(--accent)}
+    .menu-btn{display:none;background:none;border:0;color:var(--text);font-size:1.4rem;cursor:pointer}
+
+    /* ---------- Hero ---------- */
+    .hero{
+      padding:88px 0 64px;
+      background:
+        radial-gradient(600px 300px at 85% -10%,rgba(232,96,42,.16),transparent),
+        radial-gradient(500px 280px at 5% 20%,rgba(240,160,75,.10),transparent);
+    }
+    .hero .tag{
+      display:inline-block;font-size:.8rem;color:var(--accent);
+      border:1px solid rgba(232,96,42,.35);border-radius:999px;
+      padding:4px 14px;margin-bottom:22px;letter-spacing:.04em;
+    }
+    .hero h1{font-size:clamp(2rem,6vw,3.2rem);line-height:1.2;font-weight:800;letter-spacing:-.03em}
+    .hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero p{color:var(--muted);max-width:560px;margin-top:18px;font-size:1.02rem}
+
+    /* ---------- Section ---------- */
+    section{padding:48px 0}
+    .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px}
+    .sec-head h2{font-size:1.4rem;font-weight:700;letter-spacing:-.02em}
+    .sec-head a{font-size:.85rem;color:var(--muted);transition:color .2s}
+    .sec-head a:hover{color:var(--accent)}
+
+    /* ---------- Post list ---------- */
+    .posts{display:grid;gap:16px}
+    .post{
+      display:flex;gap:20px;align-items:flex-start;
+      background:var(--card);border:1px solid var(--line);
+      border-radius:var(--radius);padding:22px 24px;
+      transition:transform .2s,border-color .2s,background .2s;
+    }
+    .post:hover{transform:translateY(-3px);border-color:rgba(232,96,42,.45);background:#20202a}
+    .post .date{
+      flex:0 0 62px;font-size:.78rem;color:var(--muted);
+      font-variant-numeric:tabular-nums;padding-top:3px;
+    }
+    .post h3{font-size:1.12rem;font-weight:650;margin-bottom:6px}
+    .post p{color:var(--muted);font-size:.9rem}
+    .post .arrow{margin-left:auto;color:var(--line);font-size:1.1rem;transition:color .2s,transform .2s}
+    .post:hover .arrow{color:var(--accent);transform:translateX(3px)}
+
+    /* ---------- Cards ---------- */
+    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+    .card .ic{font-size:1.6rem;margin-bottom:12px}
+    .card h3{font-size:1rem;font-weight:650;margin-bottom:8px}
+    .card p{color:var(--muted);font-size:.88rem}
+
+    /* ---------- Footer ---------- */
+    footer{border-top:1px solid var(--line);padding:32px 0;color:var(--muted);font-size:.85rem}
+    footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+    .socials{display:flex;gap:18px}
+    .socials a:hover{color:var(--accent)}
+
+    /* ---------- Mobile ---------- */
+    @media(max-width:600px){
+      .menu-btn{display:block}
+      .nav-links{display:none}
+      .nav-links.open{display:flex;position:absolute;top:64px;left:0;right:0;flex-direction:column;gap:0;background:var(--bg2);border-bottom:1px solid var(--line);padding:10px 20px 16px}
+      .nav-links.open a{padding:12px 0;border-bottom:1px solid var(--line)}
+      .post{flex-wrap:wrap}
+      .post .arrow{display:none}
+      .hero{padding:56px 0 40px}
+    }
+  </style>
+</head>
 <body>
-  <h1>我的网站</h1>
+
+  <header>
+    <div class="wrap nav">
+      <div class="logo">wsy2126<span>.</span>blog</div>
+      <button class="menu-btn" aria-label="菜单">☰</button>
+      <nav class="nav-links" id="navLinks">
+        <a href="#posts">文章</a>
+        <a href="#about">关于</a>
+        <a href="#contact">联系</a>
+        <a href="#">RSS</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <div class="hero">
+      <div class="wrap">
+        <span class="tag">PERSONAL BLOG · 占位中</span>
+        <h1>记录学习、思考<br>与<em>代码的痕迹</em></h1>
+        <p>这里是 wsy2126 的个人博客，用来整理技术笔记、读书心得和日常随笔。目前内容均为占位符，待填充。</p>
+      </div>
+    </div>
+
+    <!-- Posts -->
+    <section id="posts" class="wrap">
+      <div class="sec-head">
+        <h2>最新文章</h2>
+        <a href="#">全部 →</a>
+      </div>
+      <div class="posts">
+        <a class="post" href="#">
+          <span class="date">11.01</span>
+          <div>
+            <h3>文章标题占位：这里是第一篇示例</h3>
+            <p>摘要占位文字，用于展示文章列表的排版效果。正式使用时替换为真实内容……</p>
+          </div>
+          <span class="arrow">→</span>
+        </a>
+        <a class="post" href="#">
+          <span class="date">10.24</span>
+          <div>
+            <h3>文章标题占位：这是第二篇示例</h3>
+            <p>摘要占位文字，用于展示文章列表的排版效果。正式使用时替换为真实内容……</p>
+          </div>
+          <span class="arrow">→</span>
+        </a>
+        <a class="post" href="#">
+          <span class="date">10.18</span>
+          <div>
+            <h3>文章标题占位：这是第三篇示例</h3>
+            <p>摘要占位文字，用于展示文章列表的排版效果。正式使用时替换为真实内容……</p>
+          </div>
+          <span class="arrow">→</span>
+        </a>
+        <a class="post" href="#">
+          <span class="date">10.05</span>
+          <div>
+            <h3>文章标题占位：这是第四篇示例</h3>
+            <p>摘要占位文字，用于展示文章列表的排版效果。正式使用时替换为真实内容……</p>
+          </div>
+          <span class="arrow">→</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="wrap">
+      <div class="sec-head">
+        <h2>关于这里</h2>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="ic">✍️</div>
+          <h3>技术笔记</h3>
+          <p>学习过程中踩过的坑、总结的技巧，备忘给自己，也或许能帮到别人。</p>
+        </div>
+        <div class="card">
+          <div class="ic">📚</div>
+          <h3>读书随笔</h3>
+          <p>读过的书、看过的文章，随手记下感想与摘录。</p>
+        </div>
+        <div class="card">
+          <div class="ic">🧪</div>
+          <h3>项目实验</h3>
+          <p>练手的小项目、折腾的工具，代码会同步到 GitHub。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="wrap">
+      <div class="sec-head">
+        <h2>联系方式</h2>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="ic">🐙</div>
+          <h3>GitHub</h3>
+          <p>github.com/wsy2126（占位链接）</p>
+        </div>
+        <div class="card">
+          <div class="ic">✉️</div>
+          <h3>Email</h3>
+          <p>your@email.com（占位，可在仓库 Settings 中修改）</p>
+        </div>
+        <div class="card">
+          <div class="ic">🔗</div>
+          <h3>其他</h3>
+          <p>更多链接占位，按需替换。</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 wsy2126 · 本站基于 GitHub Pages 构建</span>
+      <div class="socials">
+        <a href="#">GitHub</a>
+        <a href="#">Email</a>
+        <a href="#">Top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelector('.menu-btn').addEventListener('click',function(){
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+  </script>
 </body>
 </html>
