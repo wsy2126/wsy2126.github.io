@@ -3,21 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>wsy2126 的博客</title>
+  <title>wsy2126 的个人主页</title>
+
+  <!-- 防闪烁：在页面渲染前就确定主题 -->
+  <script>
+    (function () {
+      try {
+        var s = localStorage.getItem('blog-theme');
+        var t = s || (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
   <style>
     :root{
+      /* —— 深色（默认） —— */
       --bg:#0e0e10;
       --bg2:#16161a;
       --card:#1c1c22;
+      --card-hover:#20202a;
       --line:#2a2a32;
       --text:#ececef;
       --muted:#9a9aa6;
-      --accent:#e8602a;      /* 暖橙，主色 */
-      --accent2:#f0a04b;     /* 暖黄橙，辅色 */
+      --accent:#e8602a;
+      --accent2:#f0a04b;
+      --header-bg:rgba(14,14,16,.82);
+      --glow1:rgba(232,96,42,.16);
+      --glow2:rgba(240,160,75,.10);
       --radius:16px;
       --maxw:960px;
     }
-    *{box-sizing:border-box;margin:0;padding:0}
+    :root[data-theme="light"]{
+      /* —— 浅色（米白 + 暖橙） —— */
+      --bg:#faf8f5;
+      --bg2:#ffffff;
+      --card:#ffffff;
+      --card-hover:#f4efe7;
+      --line:#e8e0d5;
+      --text:#1c1a18;
+      --muted:#6f6a64;
+      --accent:#d9541f;
+      --accent2:#e08a2e;
+      --header-bg:rgba(250,248,245,.85);
+      --glow1:rgba(232,96,42,.14);
+      --glow2:rgba(240,160,75,.14);
+    }
+
+    *{
+      box-sizing:border-box;margin:0;padding:0;
+      -webkit-tap-highlight-color:transparent;
+    }
     html{scroll-behavior:smooth}
     body{
       background:var(--bg);
@@ -25,6 +61,7 @@
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
       line-height:1.75;
       -webkit-font-smoothing:antialiased;
+      transition:background .3s ease,color .3s ease;
     }
     a{color:inherit;text-decoration:none}
     .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
@@ -32,24 +69,49 @@
     /* ---------- Header ---------- */
     header{
       position:sticky;top:0;z-index:20;
-      background:rgba(14,14,16,.82);
+      background:var(--header-bg);
       backdrop-filter:blur(12px);
       border-bottom:1px solid var(--line);
+      transition:background .3s ease,border-color .3s ease;
     }
-    .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+    .nav{display:flex;align-items:center;height:64px}
     .logo{font-weight:800;font-size:1.15rem;letter-spacing:-.02em}
     .logo span{color:var(--accent)}
-    .nav-links{display:flex;gap:26px;font-size:.92rem;color:var(--muted)}
+    .nav-links{margin-left:auto;display:flex;gap:26px;font-size:.92rem;color:var(--muted)}
     .nav-links a{transition:color .2s}
     .nav-links a:hover{color:var(--accent)}
-    .menu-btn{display:none;background:none;border:0;color:var(--text);font-size:1.4rem;cursor:pointer}
+
+    .theme-btn,.menu-btn{
+      background:none;border:1px solid var(--line);
+      color:var(--text);cursor:pointer;
+      border-radius:999px;line-height:1;
+      user-select:none;-webkit-touch-callout:none;
+      transition:background .2s,border-color .2s,transform .3s cubic-bezier(.4,0,.2,1);
+    }
+    .theme-btn{
+      width:36px;height:36px;font-size:1rem;
+      display:flex;align-items:center;justify-content:center;
+    }
+    /* 去掉点击后浏览器自带的方形描边（那个套在圆框外的方框） */
+    .theme-btn:focus,.menu-btn:focus,
+    .theme-btn:focus-visible,.menu-btn:focus-visible{outline:none}
+    /* 悬停效果只给真鼠标设备，手机点一下不会残留 */
+    @media(hover:hover){
+      .theme-btn:hover{border-color:var(--accent);transform:rotate(-18deg)}
+    }
+    .menu-btn{
+      display:none;width:36px;height:36px;font-size:1.05rem;
+      align-items:center;justify-content:center;
+    }
+    .menu-btn.open{transform:rotate(180deg);border-color:var(--accent)}
+    .nav-right{display:flex;align-items:center;gap:10px;margin-left:22px}
 
     /* ---------- Hero ---------- */
     .hero{
       padding:88px 0 64px;
       background:
-        radial-gradient(600px 300px at 85% -10%,rgba(232,96,42,.16),transparent),
-        radial-gradient(500px 280px at 5% 20%,rgba(240,160,75,.10),transparent);
+        radial-gradient(600px 300px at 85% -10%,var(--glow1),transparent),
+        radial-gradient(500px 280px at 5% 20%,var(--glow2),transparent);
     }
     .hero .tag{
       display:inline-block;font-size:.8rem;color:var(--accent);
@@ -58,55 +120,79 @@
     }
     .hero h1{font-size:clamp(2rem,6vw,3.2rem);line-height:1.2;font-weight:800;letter-spacing:-.03em}
     .hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
-    .hero p{color:var(--muted);max-width:560px;margin-top:18px;font-size:1.02rem}
+    .hero p{color:var(--muted);max-width:600px;margin-top:18px;font-size:1.02rem}
 
     /* ---------- Section ---------- */
     section{padding:48px 0}
-    .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px}
+    .sec-head{margin-bottom:24px}
     .sec-head h2{font-size:1.4rem;font-weight:700;letter-spacing:-.02em}
-    .sec-head a{font-size:.85rem;color:var(--muted);transition:color .2s}
-    .sec-head a:hover{color:var(--accent)}
-
-    /* ---------- Post list ---------- */
-    .posts{display:grid;gap:16px}
-    .post{
-      display:flex;gap:20px;align-items:flex-start;
-      background:var(--card);border:1px solid var(--line);
-      border-radius:var(--radius);padding:22px 24px;
-      transition:transform .2s,border-color .2s,background .2s;
-    }
-    .post:hover{transform:translateY(-3px);border-color:rgba(232,96,42,.45);background:#20202a}
-    .post .date{
-      flex:0 0 62px;font-size:.78rem;color:var(--muted);
-      font-variant-numeric:tabular-nums;padding-top:3px;
-    }
-    .post h3{font-size:1.12rem;font-weight:650;margin-bottom:6px}
-    .post p{color:var(--muted);font-size:.9rem}
-    .post .arrow{margin-left:auto;color:var(--line);font-size:1.1rem;transition:color .2s,transform .2s}
-    .post:hover .arrow{color:var(--accent);transform:translateX(3px)}
+    .sec-head p{color:var(--muted);font-size:.88rem;margin-top:4px}
 
     /* ---------- Cards ---------- */
-    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+    .card{
+      background:var(--card);border:1px solid var(--line);
+      border-radius:var(--radius);padding:24px;
+      transition:background .3s ease,border-color .3s ease;
+    }
     .card .ic{font-size:1.6rem;margin-bottom:12px}
     .card h3{font-size:1rem;font-weight:650;margin-bottom:8px}
-    .card p{color:var(--muted);font-size:.88rem}
+    .card p{color:var(--muted);font-size:.9rem;word-break:break-all}
+
+    a.link-card{
+      display:block;
+      transition:transform .2s,border-color .2s,background .2s;
+    }
+    a.link-card:hover{transform:translateY(-3px);border-color:var(--accent);background:var(--card-hover)}
+    a.link-card .go{display:inline-block;margin-left:6px;color:var(--accent);transition:transform .2s}
+    a.link-card:hover .go{transform:translateX(3px)}
+
+    /* ---------- 金句 ---------- */
+    .quote-wrap{padding:20px 0}
+    .quote{
+      border-left:3px solid var(--accent);
+      padding:6px 0 6px 22px;
+      font-size:clamp(1.1rem,3.5vw,1.4rem);
+      font-weight:600;letter-spacing:-.01em;line-height:1.6;
+    }
+    .quote span{
+      display:block;font-size:.85rem;font-weight:400;
+      color:var(--muted);margin-top:8px;letter-spacing:0;
+    }
 
     /* ---------- Footer ---------- */
-    footer{border-top:1px solid var(--line);padding:32px 0;color:var(--muted);font-size:.85rem}
+    footer{border-top:1px solid var(--line);padding:32px 0;color:var(--muted);font-size:.85rem;transition:border-color .3s}
     footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
-    .socials{display:flex;gap:18px}
+    .socials{display:flex;flex-wrap:wrap;flex-shrink:0}
+    .socials a{white-space:nowrap;transition:color .2s}
+    .socials a + a{margin-left:18px}
     .socials a:hover{color:var(--accent)}
 
     /* ---------- Mobile ---------- */
     @media(max-width:600px){
-      .menu-btn{display:block}
-      .nav-links{display:none}
-      .nav-links.open{display:flex;position:absolute;top:64px;left:0;right:0;flex-direction:column;gap:0;background:var(--bg2);border-bottom:1px solid var(--line);padding:10px 20px 16px}
-      .nav-links.open a{padding:12px 0;border-bottom:1px solid var(--line)}
-      .post{flex-wrap:wrap}
-      .post .arrow{display:none}
+      .menu-btn{display:flex}
+      .nav-links{
+        position:absolute;top:64px;left:0;right:0;
+        margin-left:0;
+        display:flex;flex-direction:column;gap:0;
+        background:var(--bg2);
+        border-bottom:1px solid var(--line);
+        padding:0 20px;
+        max-height:0;opacity:0;overflow:hidden;
+        pointer-events:none;
+        transition:max-height .32s cubic-bezier(.4,0,.2,1),
+                   opacity .26s ease,
+                   padding .32s cubic-bezier(.4,0,.2,1);
+      }
+      .nav-links.open{
+        max-height:280px;opacity:1;
+        padding:8px 20px 16px;
+        pointer-events:auto;
+      }
+      .nav-links a{padding:13px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+      .nav-links a:last-child{border-bottom:0}
       .hero{padding:56px 0 40px}
+      .nav-right{margin-left:auto}
     }
   </style>
 </head>
@@ -114,114 +200,104 @@
 
   <header>
     <div class="wrap nav">
-      <div class="logo">wsy2126<span>.</span>blog</div>
-      <button class="menu-btn" aria-label="菜单">☰</button>
+      <div class="logo">wsy2126<span>.</span>me</div>
       <nav class="nav-links" id="navLinks">
-        <a href="#posts">文章</a>
         <a href="#about">关于</a>
+        <a href="#notes">碎碎念</a>
         <a href="#contact">联系</a>
-        <a href="#">RSS</a>
       </nav>
+      <div class="nav-right">
+        <button class="theme-btn" id="themeBtn" aria-label="切换主题">🌙</button>
+        <button class="menu-btn" id="menuBtn" aria-label="菜单">☰</button>
+      </div>
     </div>
   </header>
 
   <main>
     <!-- Hero -->
-    <div class="hero">
+    <div class="hero" id="top">
       <div class="wrap">
-        <span class="tag">PERSONAL BLOG · 占位中</span>
+        <span class="tag">PERSONAL HOMEPAGE</span>
         <h1>记录学习、思考<br>与<em>代码的痕迹</em></h1>
-        <p>这里是 wsy2126 的个人博客，用来整理技术笔记、读书心得和日常随笔。目前内容均为占位符，待填充。</p>
+        <p>自学编程的学生，正在往门里迈。能上 GitHub 挂点小东西，但真要写复杂项目还是会挠头。</p>
       </div>
     </div>
 
-    <!-- Posts -->
-    <section id="posts" class="wrap">
-      <div class="sec-head">
-        <h2>最新文章</h2>
-        <a href="#">全部 →</a>
-      </div>
-      <div class="posts">
-        <a class="post" href="#">
-          <span class="date">11.01</span>
-          <div>
-            <h3>文章标题占位：这里是第一篇示例</h3>
-            <p>摘要占位文字，用于展示文章列表的排版效果。正式使用时替换为真实内容……</p>
-          </div>
-          <span class="arrow">→</span>
-        </a>
-        <a class="post" href="#">
-          <span class="date">10.24</span>
-          <div>
-            <h3>文章标题占位：这是第二篇示例</h3>
-            <p>摘要占位文字，用于展示文章列表的排版效果。正式使用时替换为真实内容……</p>
-          </div>
-          <span class="arrow">→</span>
-        </a>
-        <a class="post" href="#">
-          <span class="date">10.18</span>
-          <div>
-            <h3>文章标题占位：这是第三篇示例</h3>
-            <p>摘要占位文字，用于展示文章列表的排版效果。正式使用时替换为真实内容……</p>
-          </div>
-          <span class="arrow">→</span>
-        </a>
-        <a class="post" href="#">
-          <span class="date">10.05</span>
-          <div>
-            <h3>文章标题占位：这是第四篇示例</h3>
-            <p>摘要占位文字，用于展示文章列表的排版效果。正式使用时替换为真实内容……</p>
-          </div>
-          <span class="arrow">→</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- About -->
+    <!-- 关于我：性格 / 爱好 / 成就 -->
     <section id="about" class="wrap">
       <div class="sec-head">
-        <h2>关于这里</h2>
+        <h2>关于我</h2>
+        <p>外向、话多、偶尔敏感，但敏感劲儿过去得也快</p>
       </div>
       <div class="grid">
         <div class="card">
-          <div class="ic">✍️</div>
-          <h3>技术笔记</h3>
-          <p>学习过程中踩过的坑、总结的技巧，备忘给自己，也或许能帮到别人。</p>
+          <div class="ic">😄</div>
+          <h3>性格</h3>
+          <p>外向、话多，偶尔敏感，但基本属于"当场难受，睡一觉就好"的类型。</p>
         </div>
         <div class="card">
-          <div class="ic">📚</div>
-          <h3>读书随笔</h3>
-          <p>读过的书、看过的文章，随手记下感想与摘录。</p>
+          <div class="ic">🎮</div>
+          <h3>爱好</h3>
+          <p>Minecraft 和 Terraria 常驻。动漫看得不多，但偶尔会追一两部，或者看看解说。</p>
         </div>
         <div class="card">
-          <div class="ic">🧪</div>
-          <h3>项目实验</h3>
-          <p>练手的小项目、折腾的工具，代码会同步到 GitHub。</p>
+          <div class="ic">🏆</div>
+          <h3>拿得出手的事</h3>
+          <p>九年级在化学课本里发现了一个错别字，给编辑部写信，他们真的改了。</p>
         </div>
       </div>
     </section>
 
-    <!-- Contact -->
+    <!-- 金句 -->
+    <section class="wrap quote-wrap">
+      <blockquote class="quote">
+        "我能学会，只是还没学会。"
+        <span>—— 关于自己的那点"傲慢"与信心</span>
+      </blockquote>
+    </section>
+
+    <!-- 碎碎念：编程 / 目标 / 超能力 -->
+    <section id="notes" class="wrap">
+      <div class="sec-head">
+        <h2>碎碎念</h2>
+        <p>一些零散的、还没整理成篇的想法</p>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="ic">💻</div>
+          <h3>关于编程</h3>
+          <p>自学的，所以踩过的坑比学到的知识还多。不太喜欢 Scratch 那种拖积木的玩意儿，总觉得太哄小孩——虽然承认自己现在也就比哄小孩高一点点。</p>
+        </div>
+        <div class="card">
+          <div class="ic">🎯</div>
+          <h3>小目标</h3>
+          <p>想当个程序员，能写出点有用的东西，不指望能靠这个吃饭，也不指望改变世界，但至少别让自己闲着。</p>
+        </div>
+        <div class="card">
+          <div class="ic">🌀</div>
+          <h3>想要的超能力</h3>
+          <p>传送。除了那种瞬移打架的帅，还觉得"想去哪儿就去哪儿"很自由。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 联系方式 -->
     <section id="contact" class="wrap">
       <div class="sec-head">
         <h2>联系方式</h2>
+        <p>欢迎来找我聊技术、游戏，或者随便什么</p>
       </div>
       <div class="grid">
-        <div class="card">
-          <div class="ic">🐙</div>
-          <h3>GitHub</h3>
-          <p>github.com/wsy2126（占位链接）</p>
-        </div>
-        <div class="card">
+        <a class="card link-card" href="https://github.com/wsy2126" target="_blank" rel="noopener">
+          <div class="ic">⚙️</div>
+          <h3>GitHub<span class="go">↗</span></h3>
+          <p>github.com/wsy2126</p>
+        </a>
+        <a class="card link-card" href="mailto:1452459792@qq.com">
           <div class="ic">✉️</div>
-          <h3>Email</h3>
-          <p>your@email.com（占位，可在仓库 Settings 中修改）</p>
-        </div>
-        <div class="card">
-          <div class="ic">🔗</div>
-          <h3>其他</h3>
-          <p>更多链接占位，按需替换。</p>
-        </div>
+          <h3>Email<span class="go">↗</span></h3>
+          <p>1452459792@qq.com</p>
+        </a>
       </div>
     </section>
   </main>
@@ -230,17 +306,63 @@
     <div class="wrap">
       <span>© 2026 wsy2126 · 本站基于 GitHub Pages 构建</span>
       <div class="socials">
-        <a href="#">GitHub</a>
-        <a href="#">Email</a>
-        <a href="#">Top ↑</a>
+        <a href="https://github.com/wsy2126" target="_blank" rel="noopener">GitHub</a>
+        <a href="mailto:1452459792@qq.com">Email</a>
+        <a href="#top">Top ↑</a>
       </div>
     </div>
   </footer>
 
   <script>
-    document.querySelector('.menu-btn').addEventListener('click',function(){
-      document.getElementById('navLinks').classList.toggle('open');
-    });
+    // 主题切换
+    (function () {
+      var root = document.documentElement;
+      var btn  = document.getElementById('themeBtn');
+      var KEY  = 'blog-theme';
+
+      function apply(t) {
+        root.setAttribute('data-theme', t);
+        btn.textContent = (t === 'light') ? '☀️' : '🌙';
+        btn.setAttribute('aria-label', (t === 'light') ? '切换到深色模式' : '切换到浅色模式');
+      }
+
+      var saved = null;
+      try { saved = localStorage.getItem(KEY); } catch (e) {}
+      var init = saved ||
+        (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      apply(init);
+
+      btn.addEventListener('click', function () {
+        var next = (root.getAttribute('data-theme') === 'light') ? 'dark' : 'light';
+        apply(next);
+        try { localStorage.setItem(KEY, next); } catch (e) {}
+      });
+    })();
+
+    // 移动端菜单
+    (function () {
+      var menuBtn  = document.getElementById('menuBtn');
+      var navLinks = document.getElementById('navLinks');
+
+      function setMenu(open) {
+        navLinks.classList.toggle('open', open);
+        menuBtn.classList.toggle('open', open);
+        menuBtn.textContent = open ? '✕' : '☰';
+        menuBtn.setAttribute('aria-label', open ? '关闭菜单' : '打开菜单');
+      }
+
+      menuBtn.addEventListener('click', function () {
+        setMenu(!navLinks.classList.contains('open'));
+      });
+
+      navLinks.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () { setMenu(false); });
+      });
+
+      window.addEventListener('resize', function () {
+        if (window.innerWidth > 600) setMenu(false);
+      });
+    })();
   </script>
 </body>
 </html>
