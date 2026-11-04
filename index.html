@@ -4,6 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>wsy2126 的个人主页</title>
+  <meta name="description" content="自学编程的学生，正在从门外汉往门里迈。记录学习、思考与代码的痕迹。">
+
+  <!-- favicon：内联 SVG，零额外文件，图案呼应 logo 的「白 · 橙点 · 白」 -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22%230e0e10%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%2229%22%20width%3D%2215%22%20height%3D%226%22%20rx%3D%223%22%20fill%3D%22%23ececef%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%226.5%22%20fill%3D%22%23e8602a%22%2F%3E%3Crect%20x%3D%2240%22%20y%3D%2229%22%20width%3D%2215%22%20height%3D%226%22%20rx%3D%223%22%20fill%3D%22%23ececef%22%2F%3E%3C%2Fsvg%3E">
+
+  <!-- 社交分享卡片（Open Graph）：发到 QQ/微信/Twitter 时带标题、简介、缩略图 -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="wsy2126 的个人主页">
+  <meta property="og:title" content="wsy2126 · 个人主页">
+  <meta property="og:description" content="自学编程的学生，正在从门外汉往门里迈。记录学习、思考与代码的痕迹。">
+  <meta property="og:url" content="https://wsy2126.github.io/">
+  <meta property="og:image" content="https://wsy2126.github.io/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="wsy2126 的个人主页">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- 手机浏览器地址栏配色，跟随系统深浅 -->
+  <meta name="theme-color" content="#0e0e10" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)">
 
   <!-- 防闪烁：在页面渲染前就确定主题 -->
   <script>
@@ -146,6 +166,11 @@
     a.link-card:hover{transform:translateY(-3px);border-color:var(--accent);background:var(--card-hover)}
     a.link-card .go{display:inline-block;margin-left:6px;color:var(--accent);transition:transform .2s}
     a.link-card:hover .go{transform:translateX(3px)}
+    /* QQ 卡片：点击复制号码 */
+    .qq-card{cursor:pointer;transition:transform .2s,border-color .2s,background .2s}
+    .qq-card:hover{transform:translateY(-3px);border-color:var(--accent);background:var(--card-hover)}
+    .qq-card .hint{font-size:.75rem;font-weight:400;color:var(--muted);margin-left:8px}
+    .qq-card .hint.ok{color:var(--accent)}
 
     /* ---------- 金句 ---------- */
     .quote-wrap{padding:20px 0}
@@ -293,11 +318,11 @@
           <h3>GitHub<span class="go">↗</span></h3>
           <p>github.com/wsy2126</p>
         </a>
-        <a class="card link-card" href="mailto:1452459792@qq.com">
-          <div class="ic">✉️</div>
-          <h3>Email<span class="go">↗</span></h3>
-          <p>1452459792@qq.com</p>
-        </a>
+        <div class="card qq-card" id="qqCard" data-qq="1452459792">
+          <div class="ic">💬</div>
+          <h3>QQ<span class="hint">点击复制</span></h3>
+          <p>1452459792</p>
+        </div>
       </div>
     </section>
   </main>
@@ -307,7 +332,7 @@
       <span>© 2026 wsy2126 · 本站基于 GitHub Pages 构建</span>
       <div class="socials">
         <a href="https://github.com/wsy2126" target="_blank" rel="noopener">GitHub</a>
-        <a href="mailto:1452459792@qq.com">Email</a>
+        <a href="#contact">QQ</a>
         <a href="#top">Top ↑</a>
       </div>
     </div>
@@ -336,6 +361,39 @@
         var next = (root.getAttribute('data-theme') === 'light') ? 'dark' : 'light';
         apply(next);
         try { localStorage.setItem(KEY, next); } catch (e) {}
+      });
+    })();
+
+    // QQ 号点击复制
+    (function () {
+      var c = document.getElementById('qqCard');
+      if (!c) return;
+      var h = c.querySelector('.hint');
+      var n = c.getAttribute('data-qq');
+
+      function done() {
+        h.textContent = '已复制 ✓';
+        h.classList.add('ok');
+        setTimeout(function () {
+          h.textContent = '点击复制';
+          h.classList.remove('ok');
+        }, 1600);
+      }
+      function fallback() {
+        var t = document.createElement('textarea');
+        t.value = n; t.style.position = 'fixed'; t.style.opacity = '0';
+        document.body.appendChild(t); t.select();
+        try { document.execCommand('copy'); done(); }
+        catch (e) { h.textContent = '请长按号码复制'; }
+        document.body.removeChild(t);
+      }
+
+      c.addEventListener('click', function () {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(n).then(done, fallback);
+        } else {
+          fallback();
+        }
       });
     })();
 
