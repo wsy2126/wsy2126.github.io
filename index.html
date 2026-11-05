@@ -4,22 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>wsy2126 的个人主页</title>
-  <meta name="description" content="自学编程的学生，正在往门里迈。记录学习、思考与代码的痕迹。">
+  <meta name="description" content="自学编程的学生，记录学习、思考与代码的痕迹。">
 
   <!-- favicon：内联 SVG，零额外文件，图案呼应 logo 的「白 · 橙点 · 白」 -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22%230e0e10%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%2229%22%20width%3D%2215%22%20height%3D%226%22%20rx%3D%223%22%20fill%3D%22%23ececef%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%226.5%22%20fill%3D%22%23e8602a%22%2F%3E%3Crect%20x%3D%2240%22%20y%3D%2229%22%20width%3D%2215%22%20height%3D%226%22%20rx%3D%223%22%20fill%3D%22%23ececef%22%2F%3E%3C%2Fsvg%3E">
-
-  <!-- 社交分享卡片（Open Graph）：发到 QQ/微信/Twitter 时带标题、简介、缩略图 -->
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="wsy2126 的个人主页">
-  <meta property="og:title" content="wsy2126 · 个人主页">
-  <meta property="og:description" content="自学编程的学生，正在往门里迈。记录学习、思考与代码的痕迹。">
-  <meta property="og:url" content="https://wsy2126.github.io/">
-  <meta property="og:image" content="https://wsy2126.github.io/og-image.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="wsy2126 的个人主页">
-  <meta name="twitter:card" content="summary_large_image">
 
   <!-- 手机浏览器地址栏配色，跟随系统深浅 -->
   <meta name="theme-color" content="#0e0e10" media="(prefers-color-scheme: dark)">
@@ -28,6 +16,8 @@
   <!-- 防闪烁：在页面渲染前就确定主题 -->
   <script>
     (function () {
+      // 只有 JS 可用时才隐藏待入场元素；JS 失效时页面照常全部可见
+      document.documentElement.classList.add('has-js');
       try {
         var s = localStorage.getItem('blog-theme');
         var t = s || (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
@@ -86,6 +76,20 @@
     a{color:inherit;text-decoration:none}
     .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
 
+    /* ---------- 统一图标系统（内联 SVG sprite） ---------- */
+    /* 不引 CDN / 图标字体：零外部请求，离线、国内、深浅主题都稳 */
+    .sprite{position:absolute;width:0;height:0;overflow:hidden}
+    .ico{
+      width:1em;height:1em;flex:none;
+      fill:none;stroke:currentColor;
+      stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;
+      vertical-align:-.14em;
+    }
+    /* 卡片图标：统一 26px、暖橙、线性描边 */
+    .ic{width:26px;height:26px;display:block;color:var(--accent);margin-bottom:14px}
+    /* 按钮图标：跟随文字色，不强行染橙 */
+    .btn-ico{width:18px;height:18px}
+
     /* ---------- Header ---------- */
     header{
       position:sticky;top:0;z-index:20;
@@ -124,6 +128,12 @@
       align-items:center;justify-content:center;
     }
     .menu-btn.open{transform:rotate(180deg);border-color:var(--accent)}
+    /* 图标显隐交给 CSS：不用 JS 改 DOM，加载时也不会闪一下 */
+    .theme-btn .icon-sun,.menu-btn .icon-close{display:none}
+    :root[data-theme="light"] .theme-btn .icon-moon{display:none}
+    :root[data-theme="light"] .theme-btn .icon-sun{display:block}
+    .menu-btn.open .icon-menu{display:none}
+    .menu-btn.open .icon-close{display:block}
     .nav-right{display:flex;align-items:center;gap:10px;margin-left:22px}
 
     /* ---------- Hero ---------- */
@@ -155,7 +165,6 @@
       border-radius:var(--radius);padding:24px;
       transition:background .3s ease,border-color .3s ease;
     }
-    .card .ic{font-size:1.6rem;margin-bottom:12px}
     .card h3{font-size:1rem;font-weight:650;margin-bottom:8px}
     .card p{color:var(--muted);font-size:.9rem;word-break:break-all}
 
@@ -163,14 +172,26 @@
       display:block;
       transition:transform .2s,border-color .2s,background .2s;
     }
-    a.link-card:hover{transform:translateY(-3px);border-color:var(--accent);background:var(--card-hover)}
-    a.link-card .go{display:inline-block;margin-left:6px;color:var(--accent);transition:transform .2s}
-    a.link-card:hover .go{transform:translateX(3px)}
+    a.link-card .go{
+      width:14px;height:14px;margin-left:6px;
+      color:var(--accent);vertical-align:-1px;
+      transition:transform .2s;
+    }
     /* QQ 卡片：点击复制号码 */
     .qq-card{cursor:pointer;transition:transform .2s,border-color .2s,background .2s}
-    .qq-card:hover{transform:translateY(-3px);border-color:var(--accent);background:var(--card-hover)}
     .qq-card .hint{font-size:.75rem;font-weight:400;color:var(--muted);margin-left:8px}
     .qq-card .hint.ok{color:var(--accent)}
+    .qq-card .hint .ico{width:12px;height:12px;margin-left:3px;vertical-align:-1px}
+    .foot-up{width:13px;height:13px;vertical-align:-2px}
+    /* 上浮反馈只给真鼠标设备，手机点完不会残留橙框 */
+    @media(hover:hover){
+      a.link-card:hover,.qq-card:hover{
+        transform:translateY(-3px);border-color:var(--accent);background:var(--card-hover)
+      }
+      a.link-card:hover .go{transform:translateX(3px)}
+    }
+    /* 手机端复制成功的短暂反馈，1.6s 后自动消失 */
+    .qq-card.copied{transform:translateY(-3px);border-color:var(--accent);background:var(--card-hover)}
 
     /* ---------- 金句 ---------- */
     .quote-wrap{padding:20px 0}
@@ -192,6 +213,27 @@
     .socials a{white-space:nowrap;transition:color .2s}
     .socials a + a{margin-left:18px}
     .socials a:hover{color:var(--accent)}
+    .site-days{color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums}
+    .site-days-wrap{white-space:nowrap}
+
+    /* ---------- 入场淡入 ---------- */
+    /* 必须带 .has-js 前缀：JS 不可用时元素不会被藏起来 */
+    .has-js .reveal{
+      opacity:0;
+      /* 用独立的 translate 属性做位移，和 hover 的 transform 互不干扰 */
+      translate:0 18px;
+      transition:opacity .55s ease,
+                 translate .55s cubic-bezier(.22,1,.36,1),
+                 transform .2s,
+                 background .3s ease,
+                 border-color .3s ease;
+      will-change:opacity,translate;
+    }
+    .has-js .reveal.in{opacity:1;translate:0 0}
+    /* 尊重系统「减少动态效果」设置 */
+    @media(prefers-reduced-motion:reduce){
+      .has-js .reveal{opacity:1;translate:0 0;transition:none}
+    }
 
     /* ---------- Mobile ---------- */
     @media(max-width:600px){
@@ -218,10 +260,76 @@
       .nav-links a:last-child{border-bottom:0}
       .hero{padding:56px 0 40px}
       .nav-right{margin-left:auto}
+      footer .wrap{flex-direction:column;align-items:flex-start;gap:10px}
     }
   </style>
 </head>
 <body>
+
+  <!--
+    统一图标库：24×24 线性图标，一次定义、全站 <use> 复用。
+    风格约定：fill:none / stroke:currentColor / 1.7px / 圆角端点。
+    新增图标只需在这里加一个 <symbol id="i-名字">，然后 <use href="#i-名字"/>。
+  -->
+  <svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <!-- 性格：笑脸 -->
+    <symbol id="i-smile" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M8 14.5a4.5 4.5 0 0 0 8 0"/>
+      <path d="M9 9h.01"/><path d="M15 9h.01"/>
+    </symbol>
+    <!-- 爱好：手柄 -->
+    <symbol id="i-gamepad" viewBox="0 0 24 24">
+      <rect x="2" y="7" width="20" height="10" rx="4"/>
+      <path d="M7 10.5v5"/><path d="M4.5 13h5"/>
+      <path d="M16 12h.01"/><path d="M18.5 14.5h.01"/>
+    </symbol>
+    <!-- 成就：奖杯 -->
+    <symbol id="i-trophy" viewBox="0 0 24 24">
+      <path d="M8 4h8v4a4 4 0 0 1-8 0V4Z"/>
+      <path d="M8 6H5.5A2.5 2.5 0 0 0 8 10"/>
+      <path d="M16 6h2.5A2.5 2.5 0 0 1 16 10"/>
+      <path d="M12 12v4"/><path d="M10 16h4"/><path d="M9 20h6"/>
+    </symbol>
+    <!-- 编程：尖括号 -->
+    <symbol id="i-code" viewBox="0 0 24 24">
+      <path d="m8 8-4 4 4 4"/><path d="m16 8 4 4-4 4"/><path d="m14 5-4 14"/>
+    </symbol>
+    <!-- 目标：靶心 -->
+    <symbol id="i-target" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/>
+    </symbol>
+    <!-- 超能力：传送门波纹 -->
+    <symbol id="i-portal" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="2"/>
+      <path d="M5.5 5.5a9.2 9.2 0 0 0 0 13"/>
+      <path d="M18.5 5.5a9.2 9.2 0 0 1 0 13"/>
+    </symbol>
+    <!-- GitHub 卡片：外链 -->
+    <symbol id="i-link" viewBox="0 0 24 24">
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+    </symbol>
+    <!-- QQ 卡片：对话气泡 -->
+    <symbol id="i-message" viewBox="0 0 24 24">
+      <path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/>
+    </symbol>
+    <!-- 主题：月亮 / 太阳 -->
+    <symbol id="i-moon" viewBox="0 0 24 24">
+      <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/>
+    </symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+    </symbol>
+    <!-- 菜单：汉堡 / 关闭 -->
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <!-- 箭头 / 勾 -->
+    <symbol id="i-arrow-up-right" viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></symbol>
+  </svg>
 
   <header>
     <div class="wrap nav">
@@ -232,8 +340,14 @@
         <a href="#contact">联系</a>
       </nav>
       <div class="nav-right">
-        <button class="theme-btn" id="themeBtn" aria-label="切换主题">🌙</button>
-        <button class="menu-btn" id="menuBtn" aria-label="菜单">☰</button>
+        <button class="theme-btn" id="themeBtn" aria-label="切换主题">
+          <svg class="ico btn-ico icon-moon" aria-hidden="true"><use href="#i-moon"/></svg>
+          <svg class="ico btn-ico icon-sun" aria-hidden="true"><use href="#i-sun"/></svg>
+        </button>
+        <button class="menu-btn" id="menuBtn" aria-label="菜单">
+          <svg class="ico btn-ico icon-menu" aria-hidden="true"><use href="#i-menu"/></svg>
+          <svg class="ico btn-ico icon-close" aria-hidden="true"><use href="#i-close"/></svg>
+        </button>
       </div>
     </div>
   </header>
@@ -250,23 +364,23 @@
 
     <!-- 关于我：性格 / 爱好 / 成就 -->
     <section id="about" class="wrap">
-      <div class="sec-head">
+      <div class="sec-head reveal">
         <h2>关于我</h2>
         <p>外向、话多、偶尔敏感，但敏感劲儿过去得也快</p>
       </div>
       <div class="grid">
-        <div class="card">
-          <div class="ic">😄</div>
+        <div class="card reveal">
+          <svg class="ico ic" aria-hidden="true"><use href="#i-smile"/></svg>
           <h3>性格</h3>
           <p>外向、话多，偶尔敏感，但基本属于"当场难受，睡一觉就好"的类型。</p>
         </div>
-        <div class="card">
-          <div class="ic">🎮</div>
+        <div class="card reveal">
+          <svg class="ico ic" aria-hidden="true"><use href="#i-gamepad"/></svg>
           <h3>爱好</h3>
           <p>Minecraft 和 Terraria 常驻。动漫看得不多，但偶尔会追一两部，或者看看解说。</p>
         </div>
-        <div class="card">
-          <div class="ic">🏆</div>
+        <div class="card reveal">
+          <svg class="ico ic" aria-hidden="true"><use href="#i-trophy"/></svg>
           <h3>拿得出手的事</h3>
           <p>九年级在化学课本里发现了一个错别字，给编辑部写信，他们真的改了。</p>
         </div>
@@ -275,7 +389,7 @@
 
     <!-- 金句 -->
     <section class="wrap quote-wrap">
-      <blockquote class="quote">
+      <blockquote class="quote reveal">
         "我能学会，只是还没学会。"
         <span>—— 关于自己的那点"傲慢"与信心</span>
       </blockquote>
@@ -283,23 +397,23 @@
 
     <!-- 碎碎念：编程 / 目标 / 超能力 -->
     <section id="notes" class="wrap">
-      <div class="sec-head">
+      <div class="sec-head reveal">
         <h2>碎碎念</h2>
         <p>一些零散的、还没整理成篇的想法</p>
       </div>
       <div class="grid">
-        <div class="card">
-          <div class="ic">💻</div>
+        <div class="card reveal">
+          <svg class="ico ic" aria-hidden="true"><use href="#i-code"/></svg>
           <h3>关于编程</h3>
           <p>自学的，所以踩过的坑比学到的知识还多。不太喜欢 Scratch 那种拖积木的玩意儿，总觉得太哄小孩——虽然承认自己现在也就比哄小孩高一点点。</p>
         </div>
-        <div class="card">
-          <div class="ic">🎯</div>
+        <div class="card reveal">
+          <svg class="ico ic" aria-hidden="true"><use href="#i-target"/></svg>
           <h3>小目标</h3>
           <p>想当个程序员，能写出点有用的东西，不指望能靠这个吃饭，也不指望改变世界，但至少别让自己闲着。</p>
         </div>
-        <div class="card">
-          <div class="ic">🌀</div>
+        <div class="card reveal">
+          <svg class="ico ic" aria-hidden="true"><use href="#i-portal"/></svg>
           <h3>想要的超能力</h3>
           <p>传送。除了那种瞬移打架的帅，还觉得"想去哪儿就去哪儿"很自由。</p>
         </div>
@@ -308,18 +422,18 @@
 
     <!-- 联系方式 -->
     <section id="contact" class="wrap">
-      <div class="sec-head">
+      <div class="sec-head reveal">
         <h2>联系方式</h2>
         <p>欢迎来找我聊技术、游戏，或者随便什么</p>
       </div>
       <div class="grid">
-        <a class="card link-card" href="https://github.com/wsy2126" target="_blank" rel="noopener">
-          <div class="ic">⚙️</div>
-          <h3>GitHub<span class="go">↗</span></h3>
+        <a class="card link-card reveal" href="https://github.com/wsy2126" target="_blank" rel="noopener">
+          <svg class="ico ic" aria-hidden="true"><use href="#i-link"/></svg>
+          <h3>GitHub<svg class="ico go" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></h3>
           <p>github.com/wsy2126</p>
         </a>
-        <div class="card qq-card" id="qqCard" data-qq="1452459792">
-          <div class="ic">💬</div>
+        <div class="card qq-card reveal" id="qqCard" data-qq="1452459792">
+          <svg class="ico ic" aria-hidden="true"><use href="#i-message"/></svg>
           <h3>QQ<span class="hint">点击复制</span></h3>
           <p>1452459792</p>
         </div>
@@ -329,16 +443,74 @@
 
   <footer>
     <div class="wrap">
-      <span>© 2026 wsy2126 · 本站基于 GitHub Pages 构建</span>
+      <span>© 2026 wsy2126 · 本站基于 GitHub Pages 构建 · <span class="site-days-wrap">已运行 <span class="site-days" id="siteDays">—</span> 天</span></span>
       <div class="socials">
         <a href="https://github.com/wsy2126" target="_blank" rel="noopener">GitHub</a>
         <a href="#contact">QQ</a>
-        <a href="#top">Top ↑</a>
+        <a href="#top">Top <svg class="ico foot-up" aria-hidden="true"><use href="#i-arrow-up"/></svg></a>
       </div>
     </div>
   </footer>
 
   <script>
+    // 本站已运行 X 天（把 START 改成你自己的上线日期即可）
+    (function () {
+      var el = document.getElementById('siteDays');
+      if (!el) return;
+      var START = new Date(2026, 10, 1);   // 2026-11-01，注意月份从 0 开始
+      var n = new Date();
+      var today = new Date(n.getFullYear(), n.getMonth(), n.getDate());
+      var days = Math.max(0, Math.floor((today - START) / 86400000));
+      el.textContent = days;
+      el.parentNode.title = '自 2026 年 11 月 1 日上线';
+    })();
+
+    // 卡片 / 标题滚动入场淡入
+    (function () {
+      var root  = document.documentElement;
+      var items = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+      if (!items.length) return;
+
+      var reduce = window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // 不支持观察器，或用户要求减少动效：揭掉 has-js，内容全部直接可见
+      if (!('IntersectionObserver' in window) || reduce) {
+        root.classList.remove('has-js');
+        return;
+      }
+
+      // 同一组卡片依次错开 90ms，淡入有节奏而不是齐刷刷一起出现
+      Array.prototype.forEach.call(document.querySelectorAll('.grid'), function (g) {
+        Array.prototype.forEach.call(g.querySelectorAll('.reveal'), function (el, i) {
+          var d = i * 90;
+          el.dataset.delay = d;
+          el.style.transitionDelay = d + 'ms';
+        });
+      });
+
+      function show(el) {
+        var d = parseFloat(el.dataset.delay) || 0;
+        el.classList.add('in');
+        // 动画结束后移除 reveal，hover 的 transform / transition 完全回到原样
+        setTimeout(function () {
+          el.classList.remove('reveal', 'in');
+          el.style.transitionDelay = '';
+        }, d + 700);
+      }
+
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            show(en.target);
+            io.unobserve(en.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -40px 0px', threshold: 0.08 });
+
+      items.forEach(function (el) { io.observe(el); });
+    })();
+
     // 主题切换
     (function () {
       var root = document.documentElement;
@@ -346,8 +518,7 @@
       var KEY  = 'blog-theme';
 
       function apply(t) {
-        root.setAttribute('data-theme', t);
-        btn.textContent = (t === 'light') ? '☀️' : '🌙';
+        root.setAttribute('data-theme', t);   // 图标随 data-theme 由 CSS 自动切换
         btn.setAttribute('aria-label', (t === 'light') ? '切换到深色模式' : '切换到浅色模式');
       }
 
@@ -372,11 +543,13 @@
       var n = c.getAttribute('data-qq');
 
       function done() {
-        h.textContent = '已复制 ✓';
+        h.innerHTML = '已复制 <svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>';
         h.classList.add('ok');
+        c.classList.add('copied');
         setTimeout(function () {
           h.textContent = '点击复制';
           h.classList.remove('ok');
+          c.classList.remove('copied');
         }, 1600);
       }
       function fallback() {
@@ -404,8 +577,7 @@
 
       function setMenu(open) {
         navLinks.classList.toggle('open', open);
-        menuBtn.classList.toggle('open', open);
-        menuBtn.textContent = open ? '✕' : '☰';
+        menuBtn.classList.toggle('open', open);   // 图标随 .open 由 CSS 自动切换
         menuBtn.setAttribute('aria-label', open ? '关闭菜单' : '打开菜单');
       }
 
