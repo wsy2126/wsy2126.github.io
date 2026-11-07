@@ -6,12 +6,12 @@
   <title>wsy2126 的个人主页</title>
   <meta name="description" content="自学编程的学生，记录学习、思考与代码的痕迹。">
 
-  <!-- favicon：内联 SVG，零额外文件，图案呼应 logo 的「白 · 橙点 · 白」 -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22%230e0e10%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%2229%22%20width%3D%2215%22%20height%3D%226%22%20rx%3D%223%22%20fill%3D%22%23ececef%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%226.5%22%20fill%3D%22%23e8602a%22%2F%3E%3Crect%20x%3D%2240%22%20y%3D%2229%22%20width%3D%2215%22%20height%3D%226%22%20rx%3D%223%22%20fill%3D%22%23ececef%22%2F%3E%3C%2Fsvg%3E">
+  <!-- favicon：内联 SVG，零额外文件，图案呼应 logo 的「白 · 蓝点 · 白」 -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22%230b1622%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%2229%22%20width%3D%2215%22%20height%3D%226%22%20rx%3D%223%22%20fill%3D%22%23eaf5ff%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%226.5%22%20fill%3D%22%2389c2ff%22%2F%3E%3Crect%20x%3D%2240%22%20y%3D%2229%22%20width%3D%2215%22%20height%3D%226%22%20rx%3D%223%22%20fill%3D%22%23eaf5ff%22%2F%3E%3C%2Fsvg%3E">
 
   <!-- 手机浏览器地址栏配色，跟随系统深浅 -->
-  <meta name="theme-color" content="#0e0e10" media="(prefers-color-scheme: dark)">
-  <meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1622" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#e6f7ff" media="(prefers-color-scheme: light)">
 
   <!-- 防闪烁：在页面渲染前就确定主题 -->
   <script>
@@ -28,36 +28,37 @@
 
   <style>
     :root{
-      /* —— 深色（默认） —— */
-      --bg:#0e0e10;
-      --bg2:#16161a;
-      --card:#1c1c22;
-      --card-hover:#20202a;
-      --line:#2a2a32;
-      --text:#ececef;
-      --muted:#9a9aa6;
-      --accent:#e8602a;
-      --accent2:#f0a04b;
-      --header-bg:rgba(14,14,16,.82);
-      --glow1:rgba(232,96,42,.16);
-      --glow2:rgba(240,160,75,.10);
+      /* —— 深色（默认）：深蓝黑 + 晴蓝 —— */
+      --bg:#0b1622;
+      --bg2:#101e2d;
+      --card:#152536;
+      --card-hover:#1b3046;
+      --line:#233b52;
+      --text:#eaf5ff;
+      --muted:#8fa9c0;
+      --accent:#89c2ff;   /* 色一 137 194 255 */
+      --accent2:#b9dcff;  /* 同色系过渡，用于标题渐变 */
+      --header-bg:rgba(11,22,34,.82);
+      --glow1:rgba(137,194,255,.16);
+      --glow2:rgba(137,194,255,.10);
       --radius:16px;
       --maxw:960px;
     }
     :root[data-theme="light"]{
-      /* —— 浅色（米白 + 暖橙） —— */
-      --bg:#faf8f5;
+      /* —— 浅色：冰蓝（色二 230 247 255）+ 晴蓝 —— */
+      --bg:#e6f7ff;       /* 色二 230 247 255 */
       --bg2:#ffffff;
       --card:#ffffff;
-      --card-hover:#f4efe7;
-      --line:#e8e0d5;
-      --text:#1c1a18;
-      --muted:#6f6a64;
-      --accent:#d9541f;
-      --accent2:#e08a2e;
-      --header-bg:rgba(250,248,245,.85);
-      --glow1:rgba(232,96,42,.14);
-      --glow2:rgba(240,160,75,.14);
+      --card-hover:#d9edff;
+      --line:#c6e0f5;
+      --text:#12283d;
+      --muted:#5b7891;
+      /* 浅底上直接用色一做文字对比度不够，压暗一档保持同色相；色一用于渐变/光晕 */
+      --accent:#2b7fd4;
+      --accent2:#89c2ff;  /* 色一 137 194 255 */
+      --header-bg:rgba(230,247,255,.85);
+      --glow1:rgba(137,194,255,.22);
+      --glow2:rgba(137,194,255,.14);
     }
 
     *{
@@ -85,9 +86,9 @@
       stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;
       vertical-align:-.14em;
     }
-    /* 卡片图标：统一 26px、暖橙、线性描边 */
+    /* 卡片图标：统一 26px、晴蓝、线性描边 */
     .ic{width:26px;height:26px;display:block;color:var(--accent);margin-bottom:14px}
-    /* 按钮图标：跟随文字色，不强行染橙 */
+    /* 按钮图标：跟随文字色，不强行染蓝 */
     .btn-ico{width:18px;height:18px}
 
     /* ---------- Header ---------- */
@@ -145,7 +146,7 @@
     }
     .hero .tag{
       display:inline-block;font-size:.8rem;color:var(--accent);
-      border:1px solid rgba(232,96,42,.35);border-radius:999px;
+      border:1px solid rgba(137,194,255,.55);border-radius:999px;
       padding:4px 14px;margin-bottom:22px;letter-spacing:.04em;
     }
     .hero h1{font-size:clamp(2rem,6vw,3.2rem);line-height:1.2;font-weight:800;letter-spacing:-.03em}
@@ -183,7 +184,7 @@
     .qq-card .hint.ok{color:var(--accent)}
     .qq-card .hint .ico{width:12px;height:12px;margin-left:3px;vertical-align:-1px}
     .foot-up{width:13px;height:13px;vertical-align:-2px}
-    /* 上浮反馈只给真鼠标设备，手机点完不会残留橙框 */
+    /* 上浮反馈只给真鼠标设备，手机点完不会残留蓝框 */
     @media(hover:hover){
       a.link-card:hover,.qq-card:hover{
         transform:translateY(-3px);border-color:var(--accent);background:var(--card-hover)
